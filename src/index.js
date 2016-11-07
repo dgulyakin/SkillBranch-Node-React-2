@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import checkFIOParam from './functions';
+import { checkFIOParam, normalizeStr } from './functions';
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,7 @@ app.get('/task2b', (req, res) => {
     var result = 'Invalid fullname';
     if (req.query.fullname) {
         var fullname = req.query.fullname.trim().replace(/\s+/g, ' ').split(' ');
-        console.log(req.query.fullname);
+        // console.log(req.query.fullname);
         const count = fullname.length;
         if (count > 0 && count < 4) {
             var family, name, surname;
@@ -36,7 +36,7 @@ app.get('/task2b', (req, res) => {
                 noError = noError && checkFIOParam(surname);
             }
             if (noError) {
-                result = family + (name ? ' ' + name.charAt(0).toUpperCase() + '.' || '' : '') +
+                result = normalizeStr(family) + (name ? ' ' + name.charAt(0).toUpperCase() + '.' || '' : '') +
                     (surname ? ' ' + surname.charAt(0).toUpperCase() + '.' || '' : '');
             }
         }
