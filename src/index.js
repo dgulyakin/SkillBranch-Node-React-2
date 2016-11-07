@@ -19,23 +19,26 @@ app.get('/task2a', (req, res) => {
 
 app.get('/task2b', (req, res) => {
     var result = 'Invalid fullname';
-    var fullname = req.query.fullname ? req.query.fullname.split(' ') : [];
-    const count = fullname.length;
-    if (count > 0 && count < 4) {
-        var family, name, surname;
-        family = fullname.pop();
-        var noError = checkFIOParam(family);
-        if (count >= 2) {
-            name = fullname.shift();
-            noError = noError && checkFIOParam(name);
-        }
-        if (count == 3) {
-            surname = fullname.shift();
-            noError = noError && checkFIOParam(surname);
-        }
-        if (noError) {
-            result = family + (name ? ' ' + name.charAt(0).toUpperCase() + '.' || '' : '') +
-                (surname ? ' ' + surname.charAt(0).toUpperCase() + '.' || '' : '');
+    if (req.query.fullname) {
+        var fullname = req.query.fullname.trim().replace(/\s+/g, ' ').split(' ');
+        console.log(req.query.fullname);
+        const count = fullname.length;
+        if (count > 0 && count < 4) {
+            var family, name, surname;
+            family = fullname.pop();
+            var noError = checkFIOParam(family);
+            if (count >= 2) {
+                name = fullname.shift();
+                noError = noError && checkFIOParam(name);
+            }
+            if (count == 3) {
+                surname = fullname.shift();
+                noError = noError && checkFIOParam(surname);
+            }
+            if (noError) {
+                result = family + (name ? ' ' + name.charAt(0).toUpperCase() + '.' || '' : '') +
+                    (surname ? ' ' + surname.charAt(0).toUpperCase() + '.' || '' : '');
+            }
         }
     }
     res.send(result);
